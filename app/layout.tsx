@@ -1,5 +1,4 @@
 import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -25,16 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Analytics />
-        </ThemeProvider>
+      <body className="mx-auto max-w-6xl w-full">
+        {children}
+        <Analytics />
       </body>
     </html>
   );
