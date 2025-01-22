@@ -12,34 +12,39 @@ const RenderResponse: React.FC<RenderResponseProps> = ({ messages }) => {
       {messages.map((m) => (
         <div
           key={m.id}
-          className={`flex overflow-hidden rounded-xl shadow-xl w-fit  ${
-            m.role === "user" ? "bg-accent" : "bg-secondary"
+          className={`flex ${
+            m.role === "user" ? "justify-end" : "justify-start"
           }`}
         >
           <div
-            className={`flex items-start p-4 gap-4 ${
-              m.role === "user" ? "flex-row-reverse" : "flex-row justify-start"
+            className={`flex overflow-hidden rounded-lg shadow-xl w-fit ${
+              m.role === "user" ? "bg-accent pl-5" : "bg-secondary pr-5"
             }`}
           >
-            <Image
-              src={m.role === "user" ? "/user.jpg" : "/ai-avatar.jpg"}
-              alt={m.role === "user" ? "User image" : "AI image"}
-              width={55}
-              height={55}
-              className="rounded-full"
-            />
-
             <div
-              className={`flex flex-col max-w-sm ${
-                m.role === "user"
-                  ? "items-end text-right"
-                  : "items-start text-left"
+              className={`flex items-start p-4 gap-4 ${
+                m.role === "user" ? "flex-row-reverse" : "flex-row"
               }`}
             >
-              <p className="text-base font-bold">
-                {m.role === "user" ? "You" : "AI"}
-              </p>
-              <p className="text-base font-medium">{m.content}</p>
+              <Image
+                src={m.role === "user" ? "/user.jpg" : "/ai-avatar.jpg"}
+                alt={m.role === "user" ? "User image" : "AI image"}
+                width={43}
+                height={43}
+                className="rounded-full"
+              />
+              <div
+                className={`flex flex-col max-w-sm ${
+                  m.role === "user"
+                    ? "items-end text-right"
+                    : "items-start text-left"
+                }`}
+              >
+                <p className="font-semibold text-base-300">
+                  {m.role === "user" ? "You" : "AI"}
+                </p>
+                <p className="text-white font-normal">{m.content}</p>
+              </div>
             </div>
           </div>
         </div>
