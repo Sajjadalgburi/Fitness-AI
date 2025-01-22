@@ -43,6 +43,7 @@ const Chat = () => {
       return () => clearTimeout(timeoutId);
     }
   }, [messages]);
+
   console.log(query);
 
   return (
@@ -55,7 +56,7 @@ const Chat = () => {
         <div className="mt-8 text-center">
           <div className="flex flex-wrap justify-center gap-4">
             {moods.map(({ mood, emoji }) => (
-              <button key={mood} className="btn btn-accent">
+              <button key={mood} className="btn btn-primary">
                 {emoji} {mood}
               </button>
             ))}
