@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 .chat {
-  height: calc(100vh - 130px);
+  height: calc(100vh - 100px);
   margin: auto;
 }
