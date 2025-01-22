@@ -1,16 +1,53 @@
-import Hero from "@/components/hero";
-import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
-import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+"use client";
+import { useChat } from "ai/react";
 
-export default async function Home() {
+const Page = () => {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/openai",
+  });
+
+  const renderResponse = () => {
+    /**
+     * Note make sure you style the chat messages to your preference
+     */
+
+    return (
+      <div className="response">
+        {messages.map((m, index) => (
+          <div
+            key={m.id}
+            className={`chat-line bg-slate-300 ${
+              m.role === "user" ? "user-chat" : "ai-chat"
+            }`}
+          >
+            <div style={{ width: "100%", marginLeft: "16px" }}>
+              <p className="message">{m.content}</p>
+              {index < messages.length - 1 && (
+                <div className="horizontal-line" />
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
-    <>
-      <Hero />
-      <main className="flex-1 flex flex-col gap-6 px-4">
-        <h2 className="font-medium text-xl mb-4">Next steps</h2>
-        {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-      </main>
-    </>
+    <section className="chat">
+      {renderResponse()}
+      <form onSubmit={handleSubmit} className="chat-form text-white">
+        <input
+          name="input-field"
+          type="text"
+          placeholder="Say anything"
+          onChange={handleInputChange}
+          value={input}
+          className=" text-white"
+        />
+        <button type="submit" className="send-button" />
+      </form>
+    </section>
   );
-}
+};
+
+export default Page;
