@@ -11,11 +11,11 @@ const RenderResponse: React.FC<RenderResponseProps> = ({ messages }) => {
       {messages.map((m, index) => (
         <div
           key={m.id}
-          className={`chat-line bg-slate-300 ${
+          className={`flex items-center p-8 border-b-4 bg-slate-300 ${
             m.role === "user" ? "user-chat" : "ai-chat"
           }`}
         >
-          <div style={{ width: "100%", marginLeft: "16px" }}>
+          <div className="flex m-8">
             <p className="message">{m.content}</p>
             {index < messages.length - 1 && <div className="horizontal-line" />}
           </div>
