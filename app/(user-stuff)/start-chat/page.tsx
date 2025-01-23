@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import FitnessForm from "../../../components/FitnessForm";
 import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
 
 const Page = () => {
   const supabase = createClient();
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,18 +22,18 @@ const Page = () => {
         console.error("Error fetching session:", error);
         return router.push("/sign-in");
       } else {
-        setUser(session?.user.user_metadata.email || null);
+        setUser(session?.user || null);
       }
     };
 
     fetchUser();
   }, [supabase]);
 
-  console.log(user);
+  if (!user) return null;
 
   return (
     <section>
-      <FitnessForm />
+      <FitnessForm user={user} />
     </section>
   );
 };
