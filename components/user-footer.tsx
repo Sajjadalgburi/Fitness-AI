@@ -7,7 +7,7 @@ const UserFooter = () => {
   return (
     <footer className="flex flex-col gap-3 justify-around items-center w-full max-w-xs bg-white shadow-xl rounded-lg p-2 overflow-hidden sm:mt-9">
       <div className="flex gap-x-20">
-        <Link className="flex flex-col items-center gap-1" href="/home">
+        <Link className="flex flex-col items-center gap-1" href="/">
           Home
           <Home />
         </Link>
