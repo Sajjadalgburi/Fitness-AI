@@ -1,14 +1,14 @@
 "use client";
-import { useChat } from "ai/react";
 import Navbar from "./../components/Navbar";
-import Chat from "./../components/Chat";
+import HomePage from "./../components/HomePage";
 
 const Page = () => {
   return (
-    <main className="">
+    <main>
       <Navbar />
 
-      <Chat />
+      {/* <Chat /> */}
+      <HomePage />
     </main>
   );
 };
