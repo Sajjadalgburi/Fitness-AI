@@ -1,6 +1,6 @@
 import React from "react";
 import { Message, useChat } from "ai/react";
-import { moods } from "@/utils";
+import { workoutPlans } from "@/utils";
 import RenderResponse from "./RenderResponse";
 
 const Chat = () => {
@@ -47,17 +47,17 @@ const Chat = () => {
   console.log(query);
 
   return (
-    <section className="chat flex flex-col justify-between h-full max-w-4xl w-full bg-warm-beige p-8 mx-auto rounded-lg shadow-lg">
+    <section className="chat flex flex-col justify-between h-full max-w-4xl w-full  p-8 mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden">
       <div className="flex flex-col justify-between flex-grow">
         {/* Render AI and USER response(s) here in a custom COMPONENT */}
         <RenderResponse messages={messages as Message[]} />
 
-        {/* Render moods buttons */}
+        {/* Render workoutPlans buttons */}
         <div className="mt-8 text-center">
           <div className="flex flex-wrap justify-center gap-4">
-            {moods.map(({ mood, emoji }) => (
-              <button key={mood} className="btn btn-primary">
-                {emoji} {mood}
+            {workoutPlans.map(({ plan, emoji }) => (
+              <button key={plan} className="btn btn-primary">
+                {emoji} {plan}
               </button>
             ))}
           </div>
