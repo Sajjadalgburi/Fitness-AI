@@ -23,8 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="mx-auto max-w-6xl w-full">
+    <html
+      lang="en"
+      className={`${geistSans.className}`}
+      suppressHydrationWarning
+    >
+      <body className="from-gray-900 to-gray-800">
         {children}
         <Analytics />
       </body>
