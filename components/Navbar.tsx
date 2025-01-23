@@ -1,18 +1,32 @@
 import Link from "next/link";
 import React from "react";
 import { createClient } from "@/utils/supabase/client";
-import { useCallback, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
+
 /**
  * Make the navbar smaller !
  */
 
-const Navbar = async () => {
-  // const supabase = createClient();
+const Navbar = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  const supabase = createClient();
 
-  // const { data: user, error } = await supabase.auth.getUser();
+  useEffect(() => {
+    const fetchsession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-  // console.log(user);
+      if (!session) {
+        return;
+      } else {
+        setSession(session);
+      }
+    };
+
+    fetchsession();
+  }, [supabase]);
 
   return (
     <nav className="shadow-lg mt-4 rounded-xl flex justify-between items-center px-7 py-2 max-w-4xl mx-auto fixed top-0 left-0 right-0 bg-primary-content z-10">
@@ -21,12 +35,25 @@ const Navbar = async () => {
       </h1>
 
       <div className="flex items-center space-x-4">
-        <button className="btn font-semibold btn-primary">
-          <Link href={"/sign-in"}>Login</Link>
-        </button>
-        <button className="btn font-semibold btn-secondary">
-          <Link href={"/sign-up"}>Register</Link>
-        </button>
+        {session ? (
+          <>
+            <button className="btn font-semibold btn-primary">
+              <Link href={"/account"}>Account</Link>
+            </button>
+            <button className="btn font-semibold btn-secondary">
+              <Link href={"/start-chat"}>AI Chat</Link>
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="btn font-semibold btn-primary">
+              <Link href={"/sign-in"}>Login</Link>
+            </button>
+            <button className="btn font-semibold btn-secondary">
+              <Link href={"/sign-up"}>Register</Link>
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );
