@@ -9,7 +9,7 @@ const config = {
     "./src/**/*.{ts,tsx}",
   ],
   daisyui: {
-    themes: ["nord", ""],
+    themes: ["dark", ""],
   },
   plugins: [require("tailwindcss-animate"), daisyui],
 } satisfies Config;
