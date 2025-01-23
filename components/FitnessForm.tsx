@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Chat from "./Chat";
 import UserFooter from "./user-footer";
+import { User } from "@supabase/supabase-js";
 
-export default function FitnessForm() {
+export default function FitnessForm({ user }: { user: User }) {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
+  const [weight, setWeight] = useState("");
   const [energyLevel, setEnergyLevel] = useState<number>(0);
   const [fitnessGoal, setFitnessGoal] = useState("");
   const [availabilityTime, setAvailabilityTime] = useState("");
@@ -29,7 +31,7 @@ export default function FitnessForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-4">
-      <Chat />
+      <Chat user={user} />
 
       {/* Questionnaire Card */}
       <div className="flex flex-col justify-center items-center">
@@ -41,7 +43,7 @@ export default function FitnessForm() {
             <form onSubmit={handleSubmit}>
               <div className="flex flex-wrap -mx-3">
                 {/* Age */}
-                <div className="w-full md:w-1/2 px-3 mb-6">
+                <div className="w-full md:w-1/4 px-3 mb-6">
                   <label
                     className="block text-lg font-semibold mb-2"
                     htmlFor="age"
@@ -51,17 +53,37 @@ export default function FitnessForm() {
                   <input
                     id="age"
                     type="number"
-                    placeholder="Enter your age"
+                    placeholder="age"
                     className="input input-bordered md:w-1/2 w-full"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
                     min="11"
                     max="90"
+                    required
+                  />
+                </div>{" "}
+                {/* Weight */}
+                <div className="w-full md:w-1/3 px-3 mb-6">
+                  <label
+                    className="block text-lg font-semibold mb-2"
+                    htmlFor="weight"
+                  >
+                    weight
+                  </label>
+                  <input
+                    id="weight"
+                    type="number"
+                    placeholder="Enter your weight"
+                    className="input input-bordered md:w-2/3 w-full"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                    min="11"
+                    max="90"
+                    required
                   />
                 </div>
-
                 {/* Gender */}
-                <div className="w-full md:w-1/2 px-3 mb-6">
+                <div className="w-full md:w-1/3 mb-6">
                   <label
                     className="block text-lg font-semibold mb-2"
                     htmlFor="gender"
@@ -73,6 +95,7 @@ export default function FitnessForm() {
                     className="select select-bordered w-full"
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
+                    required
                   >
                     <option value="">Select gender</option>
                     <option value="male">Male</option>
@@ -81,7 +104,6 @@ export default function FitnessForm() {
                     <option value="prefer-not-to-say">Prefer not to say</option>
                   </select>
                 </div>
-
                 {/* Energy Level */}
                 <div className="w-full px-3 mb-6">
                   <label className="block text-lg font-semibold mb-2">
@@ -100,13 +122,13 @@ export default function FitnessForm() {
                           value={level}
                           checked={energyLevel === level}
                           onChange={() => setEnergyLevel(level)}
+                          required
                         />
                         <span className="mt-2">{level}</span>
                       </label>
                     ))}
                   </div>
                 </div>
-
                 {/* Fitness Goal */}
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label
@@ -122,9 +144,9 @@ export default function FitnessForm() {
                     className="input input-bordered w-full"
                     value={fitnessGoal}
                     onChange={(e) => setFitnessGoal(e.target.value)}
+                    required
                   />
                 </div>
-
                 {/* Availability Time */}
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label
@@ -138,6 +160,7 @@ export default function FitnessForm() {
                     className="select select-bordered w-full"
                     value={availabilityTime}
                     onChange={(e) => setAvailabilityTime(e.target.value)}
+                    required
                   >
                     <option value="">Select time</option>
                     <option value="15">15 minutes</option>
@@ -146,7 +169,6 @@ export default function FitnessForm() {
                     <option value="60+">1 hour or more</option>
                   </select>
                 </div>
-
                 {/* Preferred Workout */}
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label
@@ -160,6 +182,7 @@ export default function FitnessForm() {
                     className="select select-bordered w-full"
                     value={preferredWorkout}
                     onChange={(e) => setPreferredWorkout(e.target.value)}
+                    required
                   >
                     <option value="">Select workout</option>
                     <option value="bodyweight">Bodyweight</option>
@@ -168,7 +191,6 @@ export default function FitnessForm() {
                     <option value="strength">Strength Training</option>
                   </select>
                 </div>
-
                 {/* Available Equipment */}
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label
@@ -182,6 +204,7 @@ export default function FitnessForm() {
                     className="select select-bordered w-full"
                     value={availableEquipment}
                     onChange={(e) => setAvailableEquipment(e.target.value)}
+                    required
                   >
                     <option value="">Select equipment</option>
                     <option value="none">None</option>
@@ -195,7 +218,7 @@ export default function FitnessForm() {
               <div className="form-control mt-8">
                 <button
                   type="submit"
-                  className="btn btn-primary btn-lg rounded-full hover:shadow-lg transition duration-300"
+                  className="btn btn-accent btn-lg rounded-full hover:shadow-lg transition duration-300"
                 >
                   Submit
                 </button>
