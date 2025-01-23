@@ -31,7 +31,7 @@ const RenderResponse: React.FC<RenderResponseProps> = ({ messages }) => {
                 alt={m.role === "user" ? "User image" : "AI image"}
                 width={43}
                 height={43}
-                className="rounded-full"
+                className="rounded-full justify-center flex items-center"
               />
               <div
                 className={`flex flex-col max-w-sm ${
