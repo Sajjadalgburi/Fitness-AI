@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Message, useChat } from "ai/react";
 import { workoutPlans } from "@/utils";
 import RenderResponse from "./RenderResponse";
@@ -16,16 +16,22 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
       api: "/api/openai",
     });
 
-  // Automatically send workoutInfo to Sarah AI if available
+  const [hasSentWorkoutInfo, setHasSentWorkoutInfo] = useState(false);
+
+  // Send workoutInfo to Sarah AI only once
   useEffect(() => {
-    // if (workoutInfo) {
-    //   const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
-    //     workoutInfo
-    //   )}`;
-    //   setInput(workoutMessage);
-    //   handleSubmit();
-    // }
-  }, [workoutInfo, setInput, handleSubmit]);
+    if (workoutInfo && !hasSentWorkoutInfo) {
+      const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
+        workoutInfo
+      )}`;
+
+      // Set input and immediately submit the form
+      setInput(workoutMessage);
+      setTimeout(() => handleSubmit(), 0);
+
+      setHasSentWorkoutInfo(true); // Ensure it's only triggered once
+    }
+  }, [workoutInfo, setInput, handleSubmit, hasSentWorkoutInfo]);
 
   const chatContainer = useRef<HTMLDivElement>(null);
 
