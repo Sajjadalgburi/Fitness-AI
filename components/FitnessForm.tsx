@@ -33,7 +33,6 @@ export default function FitnessForm({ user }: { user: User }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate inputs
     if (!age || !gender || !weight || !fitnessGoal || !user.id) {
       setError("Please fill out all required fields.");
       return;
@@ -52,14 +51,15 @@ export default function FitnessForm({ user }: { user: User }) {
 
     try {
       setIsLoading(true);
-      setError(null); // Clear any previous errors
+      setError(null);
       const res = await createWorkoutAction(w, user.id);
 
       if (!res.success) {
         alert("Failed to create workout. Please try again.");
+        return;
       }
 
-      setWorkoutInfo(w); // Store workoutInfo after success
+      setWorkoutInfo(w);
     } catch (err) {
       setError("Failed to create workout. Please try again.");
     } finally {
@@ -70,7 +70,7 @@ export default function FitnessForm({ user }: { user: User }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-4">
       {/* Chat component */}
-      <Chat user={user} workoutInfo={workoutInfo} /> {/* Pass workoutInfo */}
+      <Chat user={user} workoutInfo={workoutInfo} />
       {/*  */}
       {/* Questionnaire Card */}
       <div className="flex flex-col justify-center items-center">
