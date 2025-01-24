@@ -36,14 +36,19 @@ export const signUpAction = async (formData: FormData) => {
     return encodedRedirect(
       "error",
       "/sign-up",
-      "User creating failed. Please try again."
+      "User creation failed. Please try again."
     );
   }
 
-  // Insert user into the users table
-  const { error: insertError } = await supabase
-    .from("users")
-    .insert([{ password: password, email: email, username: username }]);
+  // Insert user into the users table with the same id from Supabase Auth
+  const { error: insertError } = await supabase.from("users").insert([
+    {
+      id: user.id, // Use the Supabase Auth ID to maintain consistency
+      email: email,
+      password: password,
+      username: username,
+    },
+  ]);
 
   if (insertError) {
     console.error("Error inserting user into users table:", insertError);
@@ -56,10 +61,11 @@ export const signUpAction = async (formData: FormData) => {
 
   return encodedRedirect(
     "success",
-    "/sign-up",
-    "Thanks for signing up! Please check your email for a verification link."
+    "/sign-in",
+    "Thanks for creating a new account with Fitness AI."
   );
 };
+
 export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -143,5 +149,8 @@ export const resetPasswordAction = async (formData: FormData) => {
 export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return redirect("/");
+  // Refresh the page
+  if (typeof window !== "undefined") {
+    window.location.reload();
+  }
 };
