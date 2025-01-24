@@ -3,6 +3,7 @@ import React from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
+import { signOutAction } from "@/app/actions";
 
 /**
  * Make the navbar smaller !
@@ -37,6 +38,9 @@ const Navbar = () => {
       <div className="flex items-center space-x-4">
         {session ? (
           <>
+            <button className="btn" onClick={signOutAction}>
+              Logout
+            </button>
             <button className="btn font-semibold btn-primary">
               <Link href={"/account"}>Account</Link>
             </button>
