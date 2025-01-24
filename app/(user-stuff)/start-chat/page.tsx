@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import FitnessForm from "../../../components/FitnessForm";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
+import FitnessForm from "@/components/FitnessForm";
 
 const Page = () => {
   const supabase = createClient();
