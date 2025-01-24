@@ -28,6 +28,7 @@ export default function FitnessForm({ user }: { user: User }) {
   const [availableEquipment, setAvailableEquipment] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [workoutInfo, setWorkoutInfo] = useState<WorkoutInfo | null>(null); // New state
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +39,7 @@ export default function FitnessForm({ user }: { user: User }) {
       return;
     }
 
-    const workoutInfo: WorkoutInfo = {
+    const w: WorkoutInfo = {
       age,
       gender,
       weight,
@@ -52,9 +53,13 @@ export default function FitnessForm({ user }: { user: User }) {
     try {
       setIsLoading(true);
       setError(null); // Clear any previous errors
-      await createWorkoutAction(workoutInfo, user.id);
-      // Success feedback or redirect
-      alert("Workout created successfully!");
+      const res = await createWorkoutAction(w, user.id);
+
+      if (!res.success) {
+        alert("Failed to create workout. Please try again.");
+      }
+
+      setWorkoutInfo(w); // Store workoutInfo after success
     } catch (err) {
       setError("Failed to create workout. Please try again.");
     } finally {
@@ -64,8 +69,9 @@ export default function FitnessForm({ user }: { user: User }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-4">
-      <Chat user={user} />
-
+      {/* Chat component */}
+      <Chat user={user} workoutInfo={workoutInfo} /> {/* Pass workoutInfo */}
+      {/*  */}
       {/* Questionnaire Card */}
       <div className="flex flex-col justify-center items-center">
         <div className="card w-full max-w-4xl bg-white shadow-2xl rounded-3xl overflow-hidden">
