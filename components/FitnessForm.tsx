@@ -4,6 +4,18 @@ import { useState } from "react";
 import Chat from "./Chat";
 import UserFooter from "./user-footer";
 import { User } from "@supabase/supabase-js";
+import { createWorkoutAction } from "@/lib/workout.actions";
+
+export interface WorkoutInfo {
+  age: string;
+  gender: string;
+  weight: string;
+  energyLevel: number;
+  fitnessGoal: string;
+  availabilityTime: string;
+  preferredWorkout: string;
+  availableEquipment: string;
+}
 
 export default function FitnessForm({ user }: { user: User }) {
   const [age, setAge] = useState("");
@@ -14,19 +26,40 @@ export default function FitnessForm({ user }: { user: User }) {
   const [availabilityTime, setAvailabilityTime] = useState("");
   const [preferredWorkout, setPreferredWorkout] = useState("");
   const [availableEquipment, setAvailableEquipment] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log({
+
+    // Validate inputs
+    if (!age || !gender || !weight || !fitnessGoal || !user.id) {
+      setError("Please fill out all required fields.");
+      return;
+    }
+
+    const workoutInfo: WorkoutInfo = {
       age,
       gender,
+      weight,
       energyLevel,
       fitnessGoal,
       availabilityTime,
       preferredWorkout,
       availableEquipment,
-    });
+    };
+
+    try {
+      setIsLoading(true);
+      setError(null); // Clear any previous errors
+      await createWorkoutAction(workoutInfo, user.id);
+      // Success feedback or redirect
+      alert("Workout created successfully!");
+    } catch (err) {
+      setError("Failed to create workout. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -70,17 +103,23 @@ export default function FitnessForm({ user }: { user: User }) {
                   >
                     weight
                   </label>
-                  <input
-                    id="weight"
-                    type="number"
-                    placeholder="Enter your weight"
-                    className="input input-bordered md:w-2/3 w-full"
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    min="11"
-                    max="90"
-                    required
-                  />
+
+                  <div className="relative">
+                    <input
+                      id="weight"
+                      type="number"
+                      placeholder="..."
+                      className="input input-bordered md:w-2/3 w-full "
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      min={85}
+                      max={350}
+                      required
+                    />
+                    <span className=" absolute bottom-3 right-[8rem]">
+                      Pounds
+                    </span>
+                  </div>
                 </div>
                 {/* Gender */}
                 <div className="w-full md:w-1/3 mb-6">
@@ -218,14 +257,16 @@ export default function FitnessForm({ user }: { user: User }) {
               <div className="form-control mt-8">
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="btn btn-accent btn-lg rounded-full hover:shadow-lg transition duration-300"
                 >
-                  Submit
+                  {isLoading ? "Creating Workout..." : "Create Workout"}
                 </button>
               </div>
             </form>
           </div>
         </div>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
         <UserFooter />
       </div>
     </div>
