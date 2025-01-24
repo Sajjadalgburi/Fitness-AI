@@ -16,24 +16,51 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
       api: "/api/openai",
     });
 
-  const [hasSentWorkoutInfo, setHasSentWorkoutInfo] = useState(false);
-
-  // Send workoutInfo to Sarah AI only once
-  useEffect(() => {
-    if (workoutInfo && !hasSentWorkoutInfo) {
-      const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
-        workoutInfo
-      )}`;
-
-      // Set input and immediately submit the form
-      setInput(workoutMessage);
-      setTimeout(() => handleSubmit(), 0);
-
-      setHasSentWorkoutInfo(true); // Ensure it's only triggered once
-    }
-  }, [workoutInfo, setInput, handleSubmit, hasSentWorkoutInfo]);
-
   const chatContainer = useRef<HTMLDivElement>(null);
+  const [hasSentWorkoutInfo, setHasSentWorkoutInfo] = useState(false);
+  const [storedWorkoutInfo, setStoredWorkoutInfo] =
+    useState<WorkoutInfo | null>(null);
+
+  // Store workoutInfo when it becomes available
+  useEffect(() => {
+    if (workoutInfo) {
+      console.log("Setting stored workout info:", workoutInfo);
+      setStoredWorkoutInfo(workoutInfo);
+    }
+  }, [workoutInfo]);
+
+  // Modified useEffect for auto-submission
+  useEffect(() => {
+    console.log("Auto-submit effect running");
+    console.log("Stored workout info:", storedWorkoutInfo);
+    console.log("Has sent workout info:", hasSentWorkoutInfo);
+
+    const autoSubmitWorkout = async () => {
+      if (storedWorkoutInfo && !hasSentWorkoutInfo) {
+        console.log("Attempting to auto-submit");
+        const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
+          storedWorkoutInfo
+        )}`;
+
+        try {
+          // Create a synthetic event
+          const fakeEvent = new Event("submit");
+
+          await handleSubmit(fakeEvent as any, {
+            data: workoutMessage,
+          });
+
+          // Only set this to true if the submission was successful
+          setHasSentWorkoutInfo(true);
+          setInput(workoutMessage); // Set the input value as well
+        } catch (error) {
+          console.error("Error auto-submitting:", error);
+        }
+      }
+    };
+
+    autoSubmitWorkout();
+  }, [storedWorkoutInfo, hasSentWorkoutInfo, handleSubmit, setInput]);
 
   useEffect(() => {
     chatContainer.current?.lastElementChild?.scrollIntoView({
@@ -74,7 +101,16 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit(e);
+              if (storedWorkoutInfo !== null) {
+                const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
+                  storedWorkoutInfo
+                )}`;
+                handleSubmit(e, {
+                  data: workoutMessage,
+                });
+              } else {
+                handleSubmit(e);
+              }
             }}
             className="bg-dark-forest p-6 max-w-3xl mx-auto w-full rounded-2xl relative flex items-center mt-6"
           >
