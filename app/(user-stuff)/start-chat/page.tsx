@@ -12,21 +12,17 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-
+    const fetchData = async () => {
+      const { data, error } = await supabase.auth.getUser();
       if (error) {
-        console.error("Error fetching session:", error);
-        return router.push("/sign-in");
+        console.error("Error fetching user:", error);
       } else {
-        setUser(session?.user || null);
+        console.log("data", data);
+        setUser(data.user);
       }
     };
 
-    fetchUser();
+    fetchData();
   }, [supabase]);
 
   if (!user) return null;
