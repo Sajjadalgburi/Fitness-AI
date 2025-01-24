@@ -1,41 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Message, useChat } from "ai/react";
 import { workoutPlans } from "@/utils";
 import RenderResponse from "./RenderResponse";
 import { User } from "@supabase/supabase-js";
+import { WorkoutInfo } from "./FitnessForm";
 
-const Chat = ({ user }: { user: User }) => {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "/api/openai", // calling backend API
-  });
+interface ChatProps {
+  user: User;
+  workoutInfo: WorkoutInfo | null;
+}
 
-  // State for storing query parameters
+const Chat = ({ user, workoutInfo }: ChatProps) => {
+  const { messages, input, setInput, handleInputChange, handleSubmit } =
+    useChat({
+      api: "/api/openai",
+    });
+
+  // Automatically send workoutInfo to Sarah AI if available
+  useEffect(() => {
+    if (workoutInfo) {
+      const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
+        workoutInfo
+      )}`;
+      setInput(workoutMessage);
+      handleSubmit(); // Submit the message
+    }
+  }, [workoutInfo, setInput, handleSubmit]);
 
   return (
     <section className="chat flex flex-col justify-between h-full max-w-4xl w-full p-8 mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden">
       <div className="flex flex-col justify-between flex-grow">
-        {/* Render AI and USER response(s) here in a custom COMPONENT */}
+        {/* Render AI and USER responses */}
         <RenderResponse messages={messages as Message[]} />
 
-        {/* Render workoutPlans buttons */}
+        {/* Workout plan selection buttons */}
         <div className="mt-8 text-center">
           <div className="flex flex-wrap justify-center gap-4">
             {workoutPlans.map(({ plan, emoji }) => (
-              <button key={plan} className="btn btn-primary">
+              <button
+                key={plan}
+                className="btn btn-primary"
+                onClick={() => {
+                  setInput(`I want a workout plan focused on: ${plan}`);
+                  handleSubmit(); // Submit the message
+                }}
+              >
                 {emoji} {plan}
               </button>
             ))}
           </div>
 
-          {/* Input form */}
+          {/* Input form for chat */}
           <form
-            onSubmit={handleSubmit}
-            className="bg-dark-forest p-6 max-w-3xl mx-auto w-full rounded-2xl relative flex items-center"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(e);
+            }}
+            className="bg-dark-forest p-6 max-w-3xl mx-auto w-full rounded-2xl relative flex items-center mt-6"
           >
             <input
               name="input-field"
               type="text"
-              placeholder="Say anything..."
+              placeholder="Ask Sarah AI anything..."
               onChange={handleInputChange}
               value={input}
               maxLength={100}
@@ -48,8 +74,9 @@ const Chat = ({ user }: { user: User }) => {
           </form>
         </div>
       </div>
+
       <p className="text-center text-sm text-gray-600 tracking-widest opacity-50">
-        Subject to Error
+        Responses are subject to AI limitations.
       </p>
     </section>
   );
