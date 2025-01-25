@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { WorkoutInfo } from "@/components/FitnessForm";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
+import { WorkoutInfo } from "@/interface";
 
 // Custom hook for managing workout info state
 export const useWorkoutInfo = () => {
