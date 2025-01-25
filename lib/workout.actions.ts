@@ -1,5 +1,5 @@
 "use server";
-import { WorkoutInfo } from "@/components/FitnessForm";
+import { WorkoutInfo } from "@/interface/index";
 import { createClient } from "@/utils/supabase/server";
 
 export const createWorkoutAction = async (
@@ -18,7 +18,6 @@ export const createWorkoutAction = async (
       energy_level: workoutInfo.energyLevel,
       gender: workoutInfo.gender,
       time_available: workoutInfo.availabilityTime,
-      available_equipment: workoutInfo.availableEquipment,
       preferred_workout: workoutInfo.preferredWorkout,
     },
   ]);
@@ -30,4 +29,35 @@ export const createWorkoutAction = async (
 
   console.log("Workout created successfully");
   return { success: true };
+};
+
+// Get all workouts for a user
+export const getWorkouts = async (userId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("workouts")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    return { error: "Error fetching workouts" };
+  }
+
+  return { data };
+};
+
+export const getWorkoutById = async (workoutId: number, userId: string) => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("workouts")
+    .select("*")
+    .eq("id", workoutId)
+    .eq("user_id", userId);
+
+  if (error) {
+    return { error: "Error fetching workout" };
+  }
+
+  return { data };
 };
