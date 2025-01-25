@@ -1,4 +1,4 @@
-import { Message } from "ai";
+import { Message } from "ai/react";
 import React from "react";
 import Image from "next/image";
 
@@ -6,7 +6,7 @@ interface RenderResponseProps {
   messages: Message[];
 }
 
-const RenderResponse: React.FC<RenderResponseProps> = ({ messages }) => {
+const RenderResponse = ({ messages }: RenderResponseProps) => {
   return (
     <div className="space-y-4">
       {!messages.length ? (
@@ -17,44 +17,40 @@ const RenderResponse: React.FC<RenderResponseProps> = ({ messages }) => {
           </h1>
         </div>
       ) : (
-        messages.map((m: Message) => (
+        messages.map((message) => (
           <div
-            key={m.id}
-            className={`flex ${
-              m.role === "user" ? "justify-end" : "justify-start"
+            key={message.id}
+            className={`flex items-end gap-2 ${
+              message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
+            {message.role === "assistant" && (
+              <Image
+                src="/ai-avatar.jpg"
+                alt="AI Avatar"
+                width={55}
+                height={55}
+                className="rounded-full flex justify-start"
+              />
+            )}
             <div
-              className={`flex overflow-hidden rounded-lg shadow-xl w-fit ${
-                m.role === "user" ? "bg-accent-content pl-5" : "bg-primary pr-5"
+              className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                message.role === "user"
+                  ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                  : "bg-white/10 backdrop-blur-sm text-white"
               }`}
             >
-              <div
-                className={`flex items-start p-4 gap-4 ${
-                  m.role === "user" ? "flex-row-reverse" : "flex-row"
-                }`}
-              >
-                <Image
-                  src={m.role === "user" ? "/user.jpg" : "/ai-avatar.jpg"}
-                  alt={m.role === "user" ? "User image" : "AI image"}
-                  width={43}
-                  height={43}
-                  className="rounded-full justify-center flex items-center"
-                />
-                <div
-                  className={`flex flex-col max-w-sm ${
-                    m.role === "user"
-                      ? "items-end text-right"
-                      : "items-start text-left"
-                  }`}
-                >
-                  <p className="font-semibold">
-                    {m.role === "user" ? "You" : "AI"}
-                  </p>
-                  <p className="text-white font-light ">{m.content}</p>
-                </div>
-              </div>
+              <p className="whitespace-pre-wrap">{message.content}</p>
             </div>
+            {message.role === "user" && (
+              <Image
+                src="/user.jpg"
+                alt="User Avatar"
+                width={55}
+                height={55}
+                className="rounded-full flex justify-end"
+              />
+            )}
           </div>
         ))
       )}
