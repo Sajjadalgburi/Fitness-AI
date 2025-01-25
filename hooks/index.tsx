@@ -69,7 +69,7 @@ export const useUser = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []); // Remove supabase from deps array since it's stable
+  }, [supabase.auth]);
 
   return {
     user,
