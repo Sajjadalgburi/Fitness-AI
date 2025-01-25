@@ -28,7 +28,7 @@ export default function RootLayout({
       className={`${geistSans.className}`}
       suppressHydrationWarning
     >
-      <body className="from-gray-900 to-gray-800">
+      <body className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white">
         {children}
         <Analytics />
       </body>
