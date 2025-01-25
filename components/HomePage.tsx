@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState } from "react";
 import { WorkoutInfo } from "@/interface";
 import { createWorkoutAction } from "@/lib/workout.actions";
 import { useUser } from "@/hooks/index";
@@ -18,8 +18,13 @@ const HomePage = () => {
 
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!user) {
+      router.push("/sign-in");
+      return;
+    }
 
     if (!age || !gender || !weight || !fitnessGoal || !user?.id) {
       setError("Please fill out all required fields.");
@@ -52,6 +57,7 @@ const HomePage = () => {
         router.push("/workout");
       }, 1000);
     } catch (err) {
+      console.error("Error creating workout:", err);
       setError("Failed to create workout. Please try again.");
     } finally {
       setIsLoading(false);
@@ -285,8 +291,10 @@ const HomePage = () => {
                   </svg>
                   Creating Workout...
                 </span>
-              ) : (
+              ) : user ? (
                 "Create Your Personalized Workout"
+              ) : (
+                "Login to Create Workout"
               )}
             </button>
           </div>
