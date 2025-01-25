@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Message, useChat } from "ai/react";
 import { workoutPlans } from "@/utils";
-import RenderResponse from "./RenderResponse";
+import RenderResponse from "../RenderResponse";
 import { User } from "@supabase/supabase-js";
-import { WorkoutInfo } from "./FitnessForm";
+import { WorkoutInfo } from "@/interface";
 
 interface ChatProps {
   user: User;

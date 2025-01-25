@@ -45,7 +45,7 @@ const Navbar = () => {
               <Link href={"/account"}>Account</Link>
             </button>
             <button className="btn font-semibold btn-secondary">
-              <Link href={"/start-chat"}>AI Chat</Link>
+              <Link href={"/workout"}>AI Chat</Link>
             </button>
           </>
         ) : (
