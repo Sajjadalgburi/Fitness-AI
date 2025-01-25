@@ -40,15 +40,12 @@ export const updateSession = async (request: NextRequest) => {
     const user = await supabase.auth.getUser();
 
     // protected routes
-    if (request.nextUrl.pathname.startsWith("/start-chat") && user.error) {
+    if (request.nextUrl.pathname.startsWith("/workout") && user.error) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
-    // if (request.nextUrl.pathname === "/" && !user.error) {
-    //   return NextResponse.redirect(new URL("/start-chat", request.url));
-    // }
-
     return response;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // If you are here, a Supabase client could not be created!
     // This is likely because you have not set up environment variables.
