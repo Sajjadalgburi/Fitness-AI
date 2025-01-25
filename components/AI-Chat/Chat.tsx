@@ -31,10 +31,6 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
 
   // Modified useEffect for auto-submission
   useEffect(() => {
-    console.log("Auto-submit effect running");
-    console.log("Stored workout info:", storedWorkoutInfo);
-    console.log("Has sent workout info:", hasSentWorkoutInfo);
-
     const autoSubmitWorkout = async () => {
       if (storedWorkoutInfo && !hasSentWorkoutInfo) {
         console.log("Attempting to auto-submit");
@@ -43,16 +39,9 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
         )}`;
 
         try {
-          // Create a synthetic event
-          const fakeEvent = new Event("submit");
-
-          await handleSubmit(fakeEvent as any, {
-            data: workoutMessage,
-          });
 
           // Only set this to true if the submission was successful
           setHasSentWorkoutInfo(true);
-          setInput(workoutMessage); // Set the input value as well
         } catch (error) {
           console.error("Error auto-submitting:", error);
         }
