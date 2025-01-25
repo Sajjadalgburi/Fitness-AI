@@ -80,7 +80,7 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  return redirect("/start-chat");
+  return redirect("/workout");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -149,8 +149,5 @@ export const resetPasswordAction = async (formData: FormData) => {
 export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  // Refresh the page
-  if (typeof window !== "undefined") {
-    window.location.reload();
-  }
+  return redirect("/");
 };
