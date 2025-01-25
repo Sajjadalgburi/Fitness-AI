@@ -69,15 +69,17 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
     >
       <div className="flex flex-col justify-between flex-grow">
         {/* Chat Header */}
-        <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6">
-          Chat with Your{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            AI
-          </span>{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
-            Fitness Coach
-          </span>
-        </h1>
+        {messages.length < 1 && (
+          <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6">
+            Chat with Your{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              AI
+            </span>{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
+              Fitness Coach
+            </span>
+          </h1>
+        )}
 
         {/* Messages Container */}
         <div className="flex-grow overflow-auto">
