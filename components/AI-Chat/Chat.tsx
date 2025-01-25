@@ -4,6 +4,7 @@ import { workoutPlans } from "@/utils";
 import RenderResponse from "../RenderResponse";
 import { User } from "@supabase/supabase-js";
 import { WorkoutInfo } from "@/interface";
+import UserFooter from "../user-footer";
 
 interface ChatProps {
   user: User;
@@ -39,7 +40,6 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
         )}`;
 
         try {
-
           // Only set this to true if the submission was successful
           setHasSentWorkoutInfo(true);
         } catch (error) {
@@ -65,26 +65,42 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
   return (
     <div
       ref={chatContainer}
-      className="chat overflow-auto flex flex-col justify-between h-full max-w-4xl w-full p-8 mx-auto bg-white shadow-2xl rounded-3xl"
+      className="w-full chat flex flex-col justify-between max-w-3xl h-fit bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl"
     >
       <div className="flex flex-col justify-between flex-grow">
-        {/* Render AI and USER responses */}
-        <RenderResponse messages={messages as Message[]} />
+        {/* Chat Header */}
+        <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6">
+          Chat with Your{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            AI
+          </span>{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
+            Fitness Coach
+          </span>
+        </h1>
 
-        {/* Workout plan selection buttons */}
-        <div className="mt-8 text-center">
-          <div className="flex flex-wrap justify-center gap-4">
-            {workoutPlans.map(({ plan, emoji }) => (
-              <button
-                key={plan}
-                className="btn btn-primary"
-                onClick={() => handlePlanSubmit(plan)}
-                aria-label={`Select ${plan} workout`}
-              >
-                {emoji} {plan}
-              </button>
-            ))}
-          </div>
+        {/* Messages Container */}
+        <div className="flex-grow overflow-auto">
+          <RenderResponse messages={messages as Message[]} />
+        </div>
+
+        <div className="mt-8 text-center space-y-6">
+          {/* Workout plan selection buttons */}
+          {messages.length < 1 && (
+            <div className="flex flex-wrap justify-center gap-4">
+              {workoutPlans.map(({ plan, emoji }) => (
+                <button
+                  key={plan}
+                  onClick={() => handlePlanSubmit(plan)}
+                  aria-label={`Select ${plan} workout`}
+                  className="px-6 py-3 bg-white/20 hover:bg-white/30 rounded-full text-white font-semibold 
+                            transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                >
+                  {emoji} {plan}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Input form for chat */}
           <form
@@ -101,22 +117,25 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
                 handleSubmit(e);
               }
             }}
-            className="bg-dark-forest p-6 max-w-3xl mx-auto w-full rounded-2xl relative flex items-center mt-6"
+            className="relative flex items-center gap-3 mt-6"
           >
             <input
               name="input-field"
               type="text"
               aria-label="Chat input"
-              placeholder="Ask Sarah AI anything..."
+              placeholder="Ask your AI coach anything..."
               onChange={handleInputChange}
               value={input}
               maxLength={100}
               minLength={3}
-              className="input rounded-full input-bordered input-lg w-full bg-warm-beige text-dark-forest placeholder-dark-forest focus:outline-none"
+              className="w-full px-6 py-4 bg-white/20 rounded-full text-white placeholder-gray-300
+                           focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
             />
             <button
               type="submit"
-              className="btn btn-accent ml-3"
+              className="px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold
+                           transform transition-all duration-200 hover:scale-105 hover:shadow-lg
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               aria-label="Send message"
             >
               Send
@@ -125,9 +144,13 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
         </div>
       </div>
 
-      <p className="text-center text-sm text-gray-600 tracking-widest opacity-50">
-        Responses are subject to AI limitations.
-      </p>
+      <div className="mt-8 text-center space-y-2">
+        <p className="text-sm text-gray-300 tracking-widest opacity-50">
+          Responses are subject to AI limitations.
+        </p>
+      </div>
+
+      <UserFooter />
     </div>
   );
 };
