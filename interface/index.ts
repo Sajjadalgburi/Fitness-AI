@@ -27,10 +27,10 @@ export interface WorkoutInfo {
   age: string;
   weight: string;
   gender: string;
-  energyLevel: number;
-  fitnessGoal: string;
-  availabilityTime: string;
-  preferredWorkout: string;
+  energy_level: number;
+  fitness_goal: string;
+  time_available: string;
+  preferred_workout: string;
 }
 
 export interface FitnessQuestionnaireFormProps {
