@@ -18,6 +18,7 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
     });
 
   const chatContainer = useRef<HTMLDivElement>(null);
+
   const [hasSentWorkoutInfo, setHasSentWorkoutInfo] = useState(false);
   const [storedWorkoutInfo, setStoredWorkoutInfo] =
     useState<WorkoutInfo | null>(null);
@@ -51,26 +52,33 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
     autoSubmitWorkout();
   }, [storedWorkoutInfo, hasSentWorkoutInfo, handleSubmit, setInput]);
 
-  useEffect(() => {
-    chatContainer.current?.lastElementChild?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [messages]);
-
   const handlePlanSubmit = (plan: string) => {
     setInput(`I want a workout plan focused on: ${plan}`);
     handleSubmit();
   };
 
+  const scroll = () => {
+    if (chatContainer.current) {
+      const { offsetHeight, scrollHeight, scrollTop } = chatContainer.current;
+      if (scrollHeight >= scrollTop + offsetHeight) {
+        chatContainer.current.scrollTo(0, scrollHeight + 200);
+      }
+    }
+  };
+
+  useEffect(() => {
+    scroll();
+  }, [messages]);
+
   return (
     <div
       ref={chatContainer}
-      className="w-full chat flex flex-col justify-between max-w-3xl h-fit bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl"
+      className="w-full chat flex flex-col justify-between max-w-3xl h-[80vh] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl"
     >
-      <div className="flex flex-col justify-between flex-grow">
+      <div className="flex flex-col h-full">
         {/* Chat Header */}
         {messages.length < 1 && (
-          <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6">
+          <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6 flex-shrink-0">
             Chat with Your{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
               AI
@@ -81,15 +89,16 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
           </h1>
         )}
 
-        {/* Messages Container */}
-        <div className="flex-grow overflow-auto">
+        {/* Messages Container - Make this scrollable */}
+        <div className="flex-grow overflow-y-auto mb-6">
           <RenderResponse messages={messages as Message[]} />
         </div>
 
-        <div className="mt-8 text-center space-y-6">
+        {/* Footer section - Keep this fixed */}
+        <div className="flex-shrink-0">
           {/* Workout plan selection buttons */}
           {messages.length < 1 && (
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
               {workoutPlans.map(({ plan, emoji }) => (
                 <button
                   key={plan}
@@ -143,16 +152,16 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
               Send
             </button>
           </form>
+
+          <div className="mt-8 text-center space-y-2">
+            <p className="text-sm text-gray-300 tracking-widest opacity-50">
+              Responses are subject to AI limitations.
+            </p>
+          </div>
+
+          <UserFooter />
         </div>
       </div>
-
-      <div className="mt-8 text-center space-y-2">
-        <p className="text-sm text-gray-300 tracking-widest opacity-50">
-          Responses are subject to AI limitations.
-        </p>
-      </div>
-
-      <UserFooter />
     </div>
   );
 };
