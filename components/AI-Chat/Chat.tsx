@@ -1,56 +1,68 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import { Message, useChat } from "ai/react";
 import { workoutPlans } from "@/utils";
 import RenderResponse from "../RenderResponse";
-import { User } from "@supabase/supabase-js";
 import { WorkoutInfo } from "@/interface";
 import UserFooter from "../user-footer";
+import { useSearchParams } from "next/navigation";
+import { useUser } from "@/hooks";
+import { getWorkoutById } from "@/lib/workout.actions";
 
-interface ChatProps {
-  user: User;
-  workoutInfo: WorkoutInfo | null;
-}
+const Chat: React.FC = () => {
+  const searchParams = useSearchParams();
+  const workoutId = searchParams.get("id");
+  const { user } = useUser();
+  const userId = user?.id;
 
-const Chat = ({ user, workoutInfo }: ChatProps) => {
-  const { messages, input, setInput, handleInputChange, handleSubmit } =
+  const { messages, input, setInput, handleInputChange, handleSubmit, append } =
     useChat({
       api: "/api/openai",
     });
 
-  const chatContainer = useRef<HTMLDivElement>(null);
-
+  const [error, setError] = useState<string | null>(null);
   const [hasSentWorkoutInfo, setHasSentWorkoutInfo] = useState(false);
-  const [storedWorkoutInfo, setStoredWorkoutInfo] =
-    useState<WorkoutInfo | null>(null);
-
-  // Store workoutInfo when it becomes available
-  useEffect(() => {
-    if (workoutInfo) {
-      console.log("Setting stored workout info:", workoutInfo);
-      setStoredWorkoutInfo(workoutInfo);
-    }
-  }, [workoutInfo]);
+  const chatContainer = useRef<HTMLDivElement>(null);
 
   // Modified useEffect for auto-submission
   useEffect(() => {
     const autoSubmitWorkout = async () => {
-      if (storedWorkoutInfo && !hasSentWorkoutInfo) {
-        console.log("Attempting to auto-submit");
-        const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
-          storedWorkoutInfo
-        )}`;
+      if (!workoutId || !userId) setError("No workout ID or user ID provided");
 
-        try {
-          // Only set this to true if the submission was successful
-          setHasSentWorkoutInfo(true);
-        } catch (error) {
-          console.error("Error auto-submitting:", error);
-        }
+      if (hasSentWorkoutInfo) return;
+
+      const { data } = await getWorkoutById(Number(workoutId), userId!);
+
+      if (!data?.[0]) {
+        setError("No workout info found");
+        return;
       }
+
+      const {
+        age,
+        energy_level,
+        fitness_goal,
+        gender,
+        weight,
+        preferred_workout,
+        time_available,
+      } = data[0] as WorkoutInfo;
+
+      append({
+        role: "user",
+        content: `I want a workout plan focused on: age: ${age}, energy level: ${energy_level}, fitness goal: ${fitness_goal}, gender: ${gender}, weight: ${weight}, preferred workout: ${preferred_workout}, time available: ${time_available}`,
+      });
+
+      setHasSentWorkoutInfo(true);
     };
 
     autoSubmitWorkout();
-  }, [storedWorkoutInfo, hasSentWorkoutInfo, handleSubmit, setInput]);
+  }, [workoutId, handleSubmit, setInput, userId, hasSentWorkoutInfo, append]);
+
+  // auto scroll to bottom when new message is sent
+  useEffect(() => {
+    scroll();
+  }, [messages]);
 
   const handlePlanSubmit = (plan: string) => {
     setInput(`I want a workout plan focused on: ${plan}`);
@@ -65,10 +77,6 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
       }
     }
   };
-
-  useEffect(() => {
-    scroll();
-  }, [messages]);
 
   return (
     <div
@@ -117,16 +125,7 @@ const Chat = ({ user, workoutInfo }: ChatProps) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (storedWorkoutInfo !== null) {
-                const workoutMessage = `Generate a personalized workout plan based on this data: ${JSON.stringify(
-                  storedWorkoutInfo
-                )}`;
-                handleSubmit(e, {
-                  data: workoutMessage,
-                });
-              } else {
-                handleSubmit(e);
-              }
+              handleSubmit(e);
             }}
             className="relative flex items-center gap-3 mt-6"
           >
