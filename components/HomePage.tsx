@@ -20,13 +20,14 @@ const HomePage = () => {
   const [workoutCreated, setWorkoutCreated] = useState<boolean>(false);
   const router = useRouter();
   const [countdown, setCountdown] = useState<number | null>(null);
+  const [workoutId, setWorkoutId] = useState<string | null>(null);
 
   useEffect(() => {
     if (countdown === 0) {
-      router.push("/workout");
+      router.push(`/workout?id=${workoutId}`); // dynamic route to send the workout id to the workout page
       setWorkoutCreated(false);
     }
-  }, [countdown, router]);
+  }, [countdown, router, workoutId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,11 +57,12 @@ const HomePage = () => {
       setError(null);
       const res = await createWorkoutAction(w, user?.id);
 
-      if (!res.success) {
-        alert("Failed to create workout. Please try again.");
+      if (!res.success || !res.workoutId) {
+        setError("Failed to create workout. Please try again.");
         return;
       }
 
+      setWorkoutId(res.workoutId);
       setWorkoutCreated(true);
       setCountdown(3);
       const countdownInterval = setInterval(() => {
