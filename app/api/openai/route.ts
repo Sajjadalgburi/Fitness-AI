@@ -33,7 +33,10 @@ export async function POST(req: Request) {
         "- Show empathy and understanding for fitness challenges\n" +
         "- If asked about previous workouts, suggest creating a fresh plan instead\n\n" +
         'For workout requests (starting with "I want a workout plan focused on"):\n' +
-        "Respond ONLY in this exact JSON format:\n" +
+        "1. Check if a workout plan has already been provided.\n" +
+        "2. If a plan exists, respond with: 'You already have a workout plan. Would you like a new one? Please reply with yes to confirm.'\n" +
+        "3. If confirmed, generate a new workout plan using the exact JSON format below.\n\n" +
+        "Respond ONLY in this exact JSON format for workout plans:\n" +
         "{\n" +
         '  "greeting": "Brief personalized welcome",\n' +
         '  "sections": [\n' +
@@ -55,7 +58,7 @@ export async function POST(req: Request) {
         "  ],\n" +
         '  "motivation": "Encouraging closing message"\n' +
         "}\n\n" +
-        "IMPORTANT: Use JSON format ONLY for workout plans. Do not use JSON format for normal conversations. Do not repeat the same workout plan. All other interactions should be natural conversations.",
+        "IMPORTANT: Use JSON format ONLY for workout plans. Do not use JSON format for normal conversations. Do not repeat the same workout plan unless the user confirms. Reccomend only one workout plan at a time, and if the user insists on more than one, suggest creating a new workout plan. All other interactions should be natural conversations.",
       prompt: messages[0].content,
     });
 
