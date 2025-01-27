@@ -16,11 +16,11 @@ export const createWorkoutAction = async (
         user_id: userId,
         age: workoutInfo.age,
         weight: workoutInfo.weight,
-        fitness_goal: workoutInfo.fitnessGoal,
-        energy_level: workoutInfo.energyLevel,
+        fitness_goal: workoutInfo.fitness_goal,
+        energy_level: workoutInfo.energy_level,
         gender: workoutInfo.gender,
-        time_available: workoutInfo.availabilityTime,
-        preferred_workout: workoutInfo.preferredWorkout,
+        time_available: workoutInfo.time_available,
+        preferred_workout: workoutInfo.preferred_workout,
       },
     ])
     .select("id")
