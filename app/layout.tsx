@@ -26,13 +26,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.className}`}
+      className={`${geistSans.className} bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800`}
       suppressHydrationWarning
     >
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
-      <body className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white">
+      <body className="text-white">
         {children}
         <Analytics />
       </body>
