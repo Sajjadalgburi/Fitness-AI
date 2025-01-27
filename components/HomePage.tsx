@@ -103,7 +103,7 @@ const HomePage = () => {
       </div>
 
       {/* Form Section - Reorganized with sections */}
-      <div className="animate-fade-in w-full xs:w-4/5 md:w-2/3 xl:w-2/5 bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl h-[75vh] sm:h-[85vh] flex flex-col">
+      <div className="animate-fade-in w-full lg:mt-10 xs:w-3/4 xl:w-4/6 mx-3 xs:mx-[5rem] md:mx-[4rem] xl:mx-[7rem] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl h-[75vh] sm:h-[85vh] flex flex-col">
         {workoutCreated ? (
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold mb-4">
@@ -128,7 +128,7 @@ const HomePage = () => {
             <div className="flex-1 flex flex-col justify-around">
               {/* Section 1: Basic Information */}
               <section>
-                <h3 className="text-sm font-semibold text-purple-300">
+                <h3 className="text-sm sm:text-lg font-semibold text-purple-300">
                   Basic Information
                 </h3>
                 <div className="grid grid-cols-3 gap-3 lg:gap-6">
@@ -142,7 +142,7 @@ const HomePage = () => {
                     <input
                       id="age"
                       type="number"
-                      className="input-style h-8 lg:h-10 text-sm"
+                      className="input-style sm:h-14 h-10 text-sm md:text-base"
                       placeholder="Age"
                       value={age}
                       onChange={(e) => {
@@ -166,7 +166,7 @@ const HomePage = () => {
                     <input
                       id="weight"
                       type="number"
-                      className="input-style h-8 lg:h-10 text-sm"
+                      className="input-style sm:h-14 h-10 text-sm md:text-base"
                       placeholder="Weight"
                       value={weight}
                       onChange={(e) => {
@@ -189,7 +189,7 @@ const HomePage = () => {
                     </label>
                     <select
                       id="gender"
-                      className="input-style h-8 lg:h-10 text-sm"
+                      className="input-style sm:h-14 h-10 text-sm md:text-base"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
                       required
@@ -208,7 +208,7 @@ const HomePage = () => {
 
               {/* Section 2: Energy Level */}
               <section>
-                <h3 className="text-sm font-semibold text-purple-300">
+                <h3 className="text-sm sm:text-lg font-semibold text-purple-300">
                   Energy Level
                 </h3>
                 <div className="form-group space-y-2">
@@ -228,7 +228,7 @@ const HomePage = () => {
                           required
                         />
                         <div
-                          className={`w-8 h-8 lg:w-12 lg:h-12 rounded-full flex items-center justify-center text-sm lg:text-lg font-semibold transition-all duration-200 
+                          className={`w-8 h-8 sm: md:w-14 sm:h-14 rounded-full flex items-center justify-center text-sm md:text-lg font-semibold transition-all duration-200 
                           ${
                             energy_level === level
                               ? "bg-purple-500 text-white scale-110"
@@ -254,7 +254,7 @@ const HomePage = () => {
 
               {/* Section 3: Goals and Time */}
               <section>
-                <h3 className="text-sm font-semibold text-purple-300">
+                <h3 className="text-sm sm:text-lg font-semibold text-purple-300">
                   Goals & Availability
                 </h3>
                 <div className="grid grid-cols-2 gap-3 lg:gap-6">
@@ -267,7 +267,7 @@ const HomePage = () => {
                     </label>
                     <select
                       id="fitness-goal"
-                      className="input-style h-8 lg:h-10 text-sm"
+                      className="input-style sm:h-14 h-10 text-sm md:text-base"
                       value={fitness_goal}
                       onChange={(e) => setFitnessGoal(e.target.value)}
                       required
@@ -289,7 +289,7 @@ const HomePage = () => {
                     </label>
                     <select
                       id="availability-time"
-                      className="input-style h-8 lg:h-10 text-sm"
+                      className="input-style sm:h-14 h-10 text-sm md:text-base"
                       value={time_available}
                       onChange={(e) => setAvailabilityTime(e.target.value)}
                       required
@@ -306,7 +306,7 @@ const HomePage = () => {
 
               {/* Section 4: Workout Preferences */}
               <section>
-                <h3 className="text-sm font-semibold text-purple-300">
+                <h3 className="text-sm sm:text-lg font-semibold text-purple-300">
                   Workout Preferences
                 </h3>
                 <div className="form-group">
@@ -318,7 +318,7 @@ const HomePage = () => {
                   </label>
                   <select
                     id="preferred-workout"
-                    className="input-style h-8 lg:h-10 text-sm"
+                    className="input-style sm:h-14 h-10 text-sm md:text-base"
                     value={preferred_workout}
                     onChange={(e) => setPreferredWorkout(e.target.value)}
                     required
@@ -334,7 +334,7 @@ const HomePage = () => {
               </section>
 
               {/* Submit Button Section */}
-              <section className="flex justify-center">
+              <section className="flex justify-center mt-6">
                 <button
                   type="submit"
                   disabled={isLoading}
