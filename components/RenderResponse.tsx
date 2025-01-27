@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { RenderResponseProps, WorkoutResponse } from "@/interface";
 import { WorkoutSection } from "./workout-card/WorkoutSection";
+import { loadingMessages } from "@/utils";
+import { LoadingMessage } from "./workout-card/LoadingMessages";
 
 const RenderResponse = ({ messages }: RenderResponseProps) => {
   const renderWorkoutResponse = (content: string) => {
@@ -13,9 +15,7 @@ const RenderResponse = ({ messages }: RenderResponseProps) => {
           : content;
 
       // If we can't parse it yet, show the raw content
-      if (!workout || !workout.greeting) {
-        return <p className="whitespace-pre-wrap">{content}</p>;
-      }
+      if (!workout || !workout.greeting) return;
 
       return (
         <div className="space-y-4">
@@ -38,10 +38,15 @@ const RenderResponse = ({ messages }: RenderResponseProps) => {
           )}
         </div>
       );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
-      console.log(e);
       // Show raw content while streaming
-      return <p className="whitespace-pre-wrap">{content}</p>;
+      return (
+        <div className="flex flex-col items-center justify-center gap-4 p-6">
+          <span className="loading loading-spinner loading-lg text-purple-500"></span>
+          <LoadingMessage messages={loadingMessages} />
+        </div>
+      );
     }
   };
 
