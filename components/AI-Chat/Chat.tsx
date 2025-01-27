@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import { Message, useChat } from "ai/react";
 import { workoutPlans } from "@/utils";
@@ -7,8 +9,21 @@ import UserFooter from "../user-footer";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/hooks";
 import { getWorkoutById } from "@/lib/workout.actions";
+import { Suspense } from "react";
+import Loading from "../Loading";
 
 const Chat: React.FC = () => {
+  return (
+    <div className="w-full chat flex flex-col justify-between max-w-3xl h-[80vh] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl">
+      <Suspense fallback={<Loading />}>
+        <ChatContent />
+      </Suspense>
+    </div>
+  );
+};
+
+// Create a new component for the chat content
+const ChatContent: React.FC = () => {
   const searchParams = useSearchParams();
   const workoutId = searchParams.get("id");
   const { user } = useUser();
@@ -93,85 +108,83 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="w-full chat flex flex-col justify-between max-w-3xl h-[80vh] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl">
-      <div className="flex flex-col h-full">
-        {/* Chat Header */}
+    <div className="flex flex-col h-full">
+      {/* Chat Header */}
+      {messages.length < 1 && (
+        <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6 flex-shrink-0">
+          Chat with Your{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            AI
+          </span>{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
+            Fitness Coach
+          </span>
+        </h1>
+      )}
+
+      {/* Messages Container - Make this scrollable */}
+      <div ref={chatContainer} className="flex-grow overflow-y-auto mb-6">
+        <RenderResponse messages={messages as Message[]} />
+      </div>
+
+      {/* Footer section - Keep this fixed */}
+      <div className="flex-shrink-0">
         {messages.length < 1 && (
-          <h1 className="text-3xl lg:text-4xl font-bold text-center mb-6 flex-shrink-0">
-            Chat with Your{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              AI
-            </span>{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
-              Fitness Coach
-            </span>
-          </h1>
+          // /* Workout plan selection buttons
+          <div className="hidden md:flex flex-wrap justify-center gap-4 mb-3">
+            {workoutPlans.map(({ plan, emoji }) => (
+              <button
+                key={plan}
+                onClick={() => handlePlanSubmit(plan)}
+                aria-label={`Select ${plan} workout`}
+                className="px-3 py-2 md:px-6 md:py-3 bg-white/20 hover:bg-white/30 rounded-full text-white font-semibold 
+                          transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              >
+                {emoji} {plan}
+              </button>
+            ))}
+          </div>
         )}
 
-        {/* Messages Container - Make this scrollable */}
-        <div ref={chatContainer} className="flex-grow overflow-y-auto mb-6">
-          <RenderResponse messages={messages as Message[]} />
-        </div>
-
-        {/* Footer section - Keep this fixed */}
-        <div className="flex-shrink-0">
-          {messages.length < 1 && (
-            // /* Workout plan selection buttons
-            <div className="hidden md:flex flex-wrap justify-center gap-4 mb-3">
-              {workoutPlans.map(({ plan, emoji }) => (
-                <button
-                  key={plan}
-                  onClick={() => handlePlanSubmit(plan)}
-                  aria-label={`Select ${plan} workout`}
-                  className="px-3 py-2 md:px-6 md:py-3 bg-white/20 hover:bg-white/30 rounded-full text-white font-semibold 
-                            transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
-                >
-                  {emoji} {plan}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Input form for chat */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit(e);
-            }}
-            className="relative flex items-center gap-3 mt-6"
+        {/* Input form for chat */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(e);
+          }}
+          className="relative flex items-center gap-3 mt-6"
+        >
+          <input
+            name="input-field"
+            type="text"
+            aria-label="Chat input"
+            placeholder="Ask your AI coach anything..."
+            onChange={handleInputChange}
+            value={input}
+            maxLength={100}
+            minLength={3}
+            className="w-full px-6 py-4 bg-white/20 rounded-full text-white placeholder-gray-300
+                         focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold
+                         transform transition-all duration-200 hover:scale-105 hover:shadow-lg
+                         disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            aria-label="Send message"
           >
-            <input
-              name="input-field"
-              type="text"
-              aria-label="Chat input"
-              placeholder="Ask your AI coach anything..."
-              onChange={handleInputChange}
-              value={input}
-              maxLength={100}
-              minLength={3}
-              className="w-full px-6 py-4 bg-white/20 rounded-full text-white placeholder-gray-300
-                           focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
-            />
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold
-                           transform transition-all duration-200 hover:scale-105 hover:shadow-lg
-                           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              aria-label="Send message"
-            >
-              {isLoading ? "Sending..." : "Send"}
-            </button>
-          </form>
+            {isLoading ? "Sending..." : "Send"}
+          </button>
+        </form>
 
-          <div className="mt-8 text-center space-y-2">
-            <p className="text-sm text-gray-300 tracking-widest opacity-50">
-              Responses are subject to AI limitations.
-            </p>
-          </div>
-
-          <UserFooter />
+        <div className="mt-8 text-center space-y-2">
+          <p className="text-sm text-gray-300 tracking-widest opacity-50">
+            Responses are subject to AI limitations.
+          </p>
         </div>
+
+        <UserFooter />
       </div>
     </div>
   );
