@@ -1,12 +1,50 @@
-import { Message } from "ai/react";
 import React from "react";
 import Image from "next/image";
-
-interface RenderResponseProps {
-  messages: Message[];
-}
+import { RenderResponseProps, WorkoutResponse } from "@/interface";
+import { WorkoutSection } from "./workout-card/WorkoutSection";
 
 const RenderResponse = ({ messages }: RenderResponseProps) => {
+  const renderWorkoutResponse = (content: string) => {
+    try {
+      // Try to parse the content as JSON
+      const workout: WorkoutResponse =
+        typeof content === "string"
+          ? JSON.parse(content.endsWith("}") ? content : content + "}")
+          : content;
+
+      // If we can't parse it yet, show the raw content
+      if (!workout || !workout.greeting) {
+        return <p className="whitespace-pre-wrap">{content}</p>;
+      }
+
+      return (
+        <div className="space-y-4">
+          {workout.greeting && (
+            <div className="bg-purple-800/30 rounded-lg p-3 border-l-4 border-purple-500">
+              <p className="text-lg font-bold text-purple-200">
+                {workout.greeting}
+              </p>
+            </div>
+          )}
+
+          {workout.sections?.map((section, idx) => (
+            <WorkoutSection key={idx} section={section} />
+          ))}
+
+          {workout.motivation && (
+            <p className="text-sm text-purple-200 italic mt-4">
+              {workout.motivation}
+            </p>
+          )}
+        </div>
+      );
+    } catch (e) {
+      console.log(e);
+      // Show raw content while streaming
+      return <p className="whitespace-pre-wrap">{content}</p>;
+    }
+  };
+
   return (
     <div className="space-y-4">
       {!messages.length ? (
@@ -20,7 +58,7 @@ const RenderResponse = ({ messages }: RenderResponseProps) => {
         messages.map((message) => (
           <div
             key={message.id}
-            className={`flex items-end gap-2 ${
+            className={`flex items-start gap-2 ${
               message.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
@@ -30,17 +68,21 @@ const RenderResponse = ({ messages }: RenderResponseProps) => {
                 alt="AI Avatar"
                 width={55}
                 height={55}
-                className="rounded-full flex justify-start"
+                className="rounded-full flex-shrink-0 mt-2"
               />
             )}
             <div
-              className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+              className={`max-w-[80%] rounded-2xl px-6 py-4 ${
                 message.role === "user"
                   ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                   : "bg-white/10 backdrop-blur-sm text-white"
               }`}
             >
-              <p className="whitespace-pre-wrap">{message.content}</p>
+              {message.role === "assistant" ? (
+                renderWorkoutResponse(message.content)
+              ) : (
+                <p className="whitespace-pre-wrap">{message.content}</p>
+              )}
             </div>
             {message.role === "user" && (
               <Image
@@ -48,7 +90,7 @@ const RenderResponse = ({ messages }: RenderResponseProps) => {
                 alt="User Avatar"
                 width={55}
                 height={55}
-                className="rounded-full flex justify-end"
+                className="rounded-full flex-shrink-0 mt-2"
               />
             )}
           </div>
