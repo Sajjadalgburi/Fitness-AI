@@ -3,6 +3,7 @@ import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import UserFooter from "@/components/user-footer";
 import Link from "next/link";
 
 export default async function Signup(props: {
@@ -47,6 +48,7 @@ export default async function Signup(props: {
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Register
           </SubmitButton>
+          <UserFooter />
           <FormMessage message={searchParams} />
         </div>
       </form>
