@@ -65,8 +65,12 @@ const Chat: React.FC = () => {
   }, [messages]);
 
   const handlePlanSubmit = (plan: string) => {
-    setInput(`I want a workout plan focused on: ${plan}`);
-    handleSubmit();
+    if (!plan) return;
+
+    append({
+      role: "user",
+      content: `I want a workout plan focused on: ${plan}`,
+    });
   };
 
   const scroll = () => {
@@ -104,15 +108,15 @@ const Chat: React.FC = () => {
 
         {/* Footer section - Keep this fixed */}
         <div className="flex-shrink-0">
-          {/* Workout plan selection buttons */}
           {messages.length < 1 && (
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
+            // /* Workout plan selection buttons
+            <div className="hidden md:flex flex-wrap justify-center gap-4 mb-3">
               {workoutPlans.map(({ plan, emoji }) => (
                 <button
                   key={plan}
                   onClick={() => handlePlanSubmit(plan)}
                   aria-label={`Select ${plan} workout`}
-                  className="px-6 py-3 bg-white/20 hover:bg-white/30 rounded-full text-white font-semibold 
+                  className="px-3 py-2 md:px-6 md:py-3 bg-white/20 hover:bg-white/30 rounded-full text-white font-semibold 
                             transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
                 >
                   {emoji} {plan}
