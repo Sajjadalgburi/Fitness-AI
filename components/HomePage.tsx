@@ -334,11 +334,11 @@ const HomePage = () => {
               </section>
 
               {/* Submit Button Section */}
-              <section className="flex justify-center mt-6">
+              <section className="flex justify-center sm:mt-6">
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="btn btn-accent rounded-2xl "
+                  className="btn btn-accent rounded-2xl md:w-1/2 sm:text-lg"
                 >
                   {isLoading ? (
                     <span>
