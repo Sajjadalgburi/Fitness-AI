@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { Message } from "ai/react/dist";
 
 export interface QCardProps {
   handleSubmit: (e: React.FormEvent) => void;
@@ -40,4 +40,29 @@ export interface FitnessQuestionnaireFormProps {
   setAvailabilityTime: (value: string) => void;
   setPreferredWorkout: (value: string) => void;
   setAvailableEquipment: (value: string[]) => void;
+}
+
+export interface Exercise {
+  name: string;
+  sets?: number;
+  reps?: number;
+  duration?: string;
+  description?: string;
+  difficulty?: 1 | 2 | 3;
+  emoji?: string;
+}
+
+export interface WorkoutSectionInterface {
+  title: string;
+  emoji?: string;
+  exercises: Exercise[];
+}
+
+export interface WorkoutResponse {
+  greeting?: string;
+  sections: WorkoutSectionInterface[];
+  motivation?: string;
+}
+export interface RenderResponseProps {
+  messages: Message[];
 }
