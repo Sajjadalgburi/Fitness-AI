@@ -83,9 +83,9 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row justify-center items-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white px-4 py-12">
-      {/* Hero Section */}
-      <div className="w-full lg:w-1/3 mt-9 lg:mt-3 text-center mb-8 lg:mb-0">
+    <div className="min-h-screen flex flex-col lg:flex-row items-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white px-4 py-8 lg:py-12">
+      {/* Hero Section - Reduced margin on mobile */}
+      <div className="w-full lg:w-1/3 mt-4 lg:mt-3 text-center mb-6 lg:mb-0">
         <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 animate-fade-in-down">
           Your Personalized{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
@@ -102,9 +102,9 @@ const HomePage = () => {
         </p>
       </div>
 
-      {/* Form Section */}
-      <div className="animate-fade-in w-full lg:w-2/3 mx-6 sm:mx-auto bg-white/10 backdrop-blur-lg rounded-2xl p-4 lg:p-8 shadow-2xl">
-        {workoutCreated == true ? (
+      {/* Form Section - Reorganized with sections */}
+      <div className="animate-fade-in w-full xs:w-4/5 md:w-2/3 xl:w-2/5 bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl h-[75vh] sm:h-[85vh] flex flex-col">
+        {workoutCreated ? (
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold mb-4">
               Workout Created Successfully! 🎉
@@ -118,217 +118,259 @@ const HomePage = () => {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 lg:space-y-8">
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
             {error && (
-              <div className="text-red-400 text-sm font-medium text-center">
+              <div className="text-red-400 text-xs lg:text-sm font-medium text-center mb-4">
                 {error}
               </div>
             )}
-            {/* Basic Info Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-              <div className="form-group">
-                <label className="label-style" htmlFor="age">
-                  Age
-                </label>
-                <input
-                  id="age"
-                  type="number"
-                  className="input-style"
-                  placeholder="Enter your age"
-                  value={age}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 2) {
-                      setAge(e.target.value);
-                    }
-                  }}
-                  min="13"
-                  max="99"
-                  required
-                />
-              </div>
 
-              <div className="form-group">
-                <label className="label-style" htmlFor="weight">
-                  Weight (lbs)
-                </label>
-                <input
-                  id="weight"
-                  type="number"
-                  className="input-style"
-                  placeholder="Enter your weight"
-                  value={weight}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 3) {
-                      setWeight(e.target.value);
-                    }
-                  }}
-                  min={80}
-                  max={400}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="label-style" htmlFor="gender">
-                  Gender
-                </label>
-                <select
-                  id="gender"
-                  className="input-style"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  required
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="non-binary">Non-binary</option>
-                  <option value="prefer-not-to-say">Prefer not to say</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Energy Level Section */}
-            <div className="form-group">
-              <label className="label-style">Energy Level</label>
-              <div className="flex flex-wrap lg:flex-nowrap justify-between items-center bg-white/5 rounded-lg p-4">
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <label
-                    key={level}
-                    className="flex flex-col items-center cursor-pointer group w-1/5 lg:w-auto mb-2 lg:mb-0"
-                  >
+            <div className="flex-1 flex flex-col justify-around">
+              {/* Section 1: Basic Information */}
+              <section>
+                <h3 className="text-sm font-semibold text-purple-300">
+                  Basic Information
+                </h3>
+                <div className="grid grid-cols-3 gap-3 lg:gap-6">
+                  <div className="form-group space-y-1">
+                    <label
+                      className="label-style text-xs lg:text-sm"
+                      htmlFor="age"
+                    >
+                      Age
+                    </label>
                     <input
-                      type="radio"
-                      name="energy-level"
-                      className="hidden"
-                      value={level}
-                      checked={energy_level === level}
-                      onChange={() => setEnergyLevel(level)}
+                      id="age"
+                      type="number"
+                      className="input-style h-8 lg:h-10 text-sm"
+                      placeholder="Age"
+                      value={age}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 2) {
+                          setAge(e.target.value);
+                        }
+                      }}
+                      min="13"
+                      max="99"
                       required
                     />
-                    <div
-                      className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center text-lg font-semibold transition-all duration-200 
-                      ${
-                        energy_level === level
-                          ? "bg-purple-500 text-white scale-110"
-                          : "bg-white/20 group-hover:bg-white/30"
-                      }`}
+                  </div>
+
+                  <div className="form-group space-y-1">
+                    <label
+                      className="label-style text-xs lg:text-sm"
+                      htmlFor="weight"
                     >
-                      {level}
-                    </div>
-                    <span className="mt-2 text-xs lg:text-sm">
-                      {level === 1
-                        ? "Low"
-                        : level === 3
-                          ? "Medium"
-                          : level === 5
-                            ? "High"
-                            : ""}
-                    </span>
+                      Weight (lbs)
+                    </label>
+                    <input
+                      id="weight"
+                      type="number"
+                      className="input-style h-8 lg:h-10 text-sm"
+                      placeholder="Weight"
+                      value={weight}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 3) {
+                          setWeight(e.target.value);
+                        }
+                      }}
+                      min={80}
+                      max={400}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group space-y-1">
+                    <label
+                      className="label-style text-xs lg:text-sm"
+                      htmlFor="gender"
+                    >
+                      Gender
+                    </label>
+                    <select
+                      id="gender"
+                      className="input-style h-8 lg:h-10 text-sm"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                      required
+                    >
+                      <option value="">Select gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="non-binary">Non-binary</option>
+                      <option value="prefer-not-to-say">
+                        Prefer not to say
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 2: Energy Level */}
+              <section>
+                <h3 className="text-sm font-semibold text-purple-300">
+                  Energy Level
+                </h3>
+                <div className="form-group space-y-2">
+                  <div className="flex justify-between items-center bg-white/5 rounded-lg p-2 lg:p-4">
+                    {[1, 2, 3, 4, 5].map((level) => (
+                      <label
+                        key={level}
+                        className="flex flex-col items-center cursor-pointer group"
+                      >
+                        <input
+                          type="radio"
+                          name="energy-level"
+                          className="hidden"
+                          value={level}
+                          checked={energy_level === level}
+                          onChange={() => setEnergyLevel(level)}
+                          required
+                        />
+                        <div
+                          className={`w-8 h-8 lg:w-12 lg:h-12 rounded-full flex items-center justify-center text-sm lg:text-lg font-semibold transition-all duration-200 
+                          ${
+                            energy_level === level
+                              ? "bg-purple-500 text-white scale-110"
+                              : "bg-white/20 group-hover:bg-white/30"
+                          }`}
+                        >
+                          {level}
+                        </div>
+                        <span className="mt-1 text-[10px] lg:text-sm">
+                          {level === 1
+                            ? "Low"
+                            : level === 3
+                              ? "Med"
+                              : level === 5
+                                ? "High"
+                                : ""}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 3: Goals and Time */}
+              <section>
+                <h3 className="text-sm font-semibold text-purple-300">
+                  Goals & Availability
+                </h3>
+                <div className="grid grid-cols-2 gap-3 lg:gap-6">
+                  <div className="form-group space-y-1">
+                    <label
+                      className="label-style text-xs lg:text-sm"
+                      htmlFor="fitness-goal"
+                    >
+                      Fitness Goal
+                    </label>
+                    <select
+                      id="fitness-goal"
+                      className="input-style h-8 lg:h-10 text-sm"
+                      value={fitness_goal}
+                      onChange={(e) => setFitnessGoal(e.target.value)}
+                      required
+                    >
+                      <option value="">Select goal</option>
+                      <option value="weight-loss">Weight Loss</option>
+                      <option value="muscle-gain">Muscle Gain</option>
+                      <option value="endurance">Endurance</option>
+                      <option value="flexibility">Flexibility</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group space-y-1">
+                    <label
+                      className="label-style text-xs lg:text-sm"
+                      htmlFor="availability-time"
+                    >
+                      Available Time
+                    </label>
+                    <select
+                      id="availability-time"
+                      className="input-style h-8 lg:h-10 text-sm"
+                      value={time_available}
+                      onChange={(e) => setAvailabilityTime(e.target.value)}
+                      required
+                    >
+                      <option value="">Select time</option>
+                      <option value="15">15 minutes</option>
+                      <option value="30">30 minutes</option>
+                      <option value="45">45 minutes</option>
+                      <option value="60+">1 hour or more</option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              {/* Section 4: Workout Preferences */}
+              <section>
+                <h3 className="text-sm font-semibold text-purple-300">
+                  Workout Preferences
+                </h3>
+                <div className="form-group">
+                  <label
+                    className="label-style text-xs lg:text-sm"
+                    htmlFor="preferred-workout"
+                  >
+                    Preferred Workout Type
                   </label>
-                ))}
-              </div>
-            </div>
+                  <select
+                    id="preferred-workout"
+                    className="input-style h-8 lg:h-10 text-sm"
+                    value={preferred_workout}
+                    onChange={(e) => setPreferredWorkout(e.target.value)}
+                    required
+                  >
+                    <option value="">Select workout type</option>
+                    <option value="cardio">Cardio</option>
+                    <option value="strength">Strength Training</option>
+                    <option value="hiit">HIIT</option>
+                    <option value="yoga">Yoga</option>
+                    <option value="pilates">Pilates</option>
+                  </select>
+                </div>
+              </section>
 
-            {/* Goals and Preferences Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-              <div className="form-group">
-                <label className="label-style" htmlFor="fitness-goal">
-                  Fitness Goal
-                </label>
-                <select
-                  id="fitness-goal"
-                  className="input-style"
-                  value={fitness_goal}
-                  onChange={(e) => setFitnessGoal(e.target.value)}
-                  required
+              {/* Submit Button Section */}
+              <section className="flex justify-center">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn btn-accent rounded-2xl "
                 >
-                  <option value="">Select goal</option>
-                  <option value="weight-loss">Weight Loss</option>
-                  <option value="muscle-gain">Muscle Gain</option>
-                  <option value="endurance">Endurance</option>
-                  <option value="flexibility">Flexibility</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="label-style" htmlFor="availability-time">
-                  Available Time
-                </label>
-                <select
-                  id="availability-time"
-                  className="input-style"
-                  value={time_available}
-                  onChange={(e) => setAvailabilityTime(e.target.value)}
-                  required
-                >
-                  <option value="">Select time</option>
-                  <option value="15">15 minutes</option>
-                  <option value="30">30 minutes</option>
-                  <option value="45">45 minutes</option>
-                  <option value="60+">1 hour or more</option>
-                </select>
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="label-style" htmlFor="preferred-workout">
-                Preferred Workout Type
-              </label>
-              <select
-                id="preferred-workout"
-                className="input-style"
-                value={preferred_workout}
-                onChange={(e) => setPreferredWorkout(e.target.value)}
-                required
-              >
-                <option value="">Select workout type</option>
-                <option value="cardio">Cardio</option>
-                <option value="strength">Strength Training</option>
-                <option value="hiit">HIIT</option>
-                <option value="yoga">Yoga</option>
-                <option value="pilates">Pilates</option>
-              </select>
-            </div>
-
-            {/* Submit Button */}
-            <div className="flex justify-center pt-4 lg:pt-6">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full lg:w-auto px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-base lg:text-lg font-semibold 
-                  transform transition-all duration-200 hover:scale-105 hover:shadow-lg disabled:opacity-50 
-                  disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {isLoading ? (
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Creating Workout...
-                  </span>
-                ) : user ? (
-                  "Create Your Personalized Workout"
-                ) : (
-                  "Login to Create Workout"
-                )}
-              </button>
+                  {isLoading ? (
+                    <span>
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Creating Workout...
+                    </span>
+                  ) : user ? (
+                    "Create Your Personalized Workout"
+                  ) : (
+                    "Login to Create Workout"
+                  )}
+                </button>
+              </section>
             </div>
           </form>
         )}
