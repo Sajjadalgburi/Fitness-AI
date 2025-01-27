@@ -151,5 +151,5 @@ export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath("/");
-  redirect("/");
+  redirect("/sign-in");
 };
