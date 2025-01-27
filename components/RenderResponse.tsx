@@ -7,16 +7,26 @@ import { LoadingMessage } from "./workout-card/LoadingMessages";
 
 const RenderResponse = ({ messages }: RenderResponseProps) => {
   const renderWorkoutResponse = (content: string) => {
-    try {
+    // Checking if the content is a normal message
+    if (typeof content === "string" && !content.includes("{")) {
+      return <p className="whitespace-pre-wrap">{content}</p>;
+    }
+
+    // Checking if the content is a loading message
+    if (!content.endsWith("}")) {
+      return (
+        <div className="flex flex-col items-center justify-center gap-4 p-6">
+          <span className="loading loading-spinner loading-lg text-purple-500"></span>
+          <LoadingMessage messages={loadingMessages} />
+        </div>
+      );
+    } else {
+      // ! This means that the content is a workout message and it ends with a "}"
+
       // Try to parse the content as JSON
-      const workout: WorkoutResponse =
-        typeof content === "string"
-          ? JSON.parse(content.endsWith("}") ? content : content + "}")
-          : content;
+      const workout: WorkoutResponse = JSON.parse(content);
 
-      // If we can't parse it yet, show the raw content
-      if (!workout || !workout.greeting) return;
-
+      // If we can parse it as JSON and it has workout-specific fields, render workout card
       return (
         <div className="space-y-4">
           {workout.greeting && (
@@ -36,15 +46,6 @@ const RenderResponse = ({ messages }: RenderResponseProps) => {
               {workout.motivation}
             </p>
           )}
-        </div>
-      );
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      // Show raw content while streaming
-      return (
-        <div className="flex flex-col items-center justify-center gap-4 p-6">
-          <span className="loading loading-spinner loading-lg text-purple-500"></span>
-          <LoadingMessage messages={loadingMessages} />
         </div>
       );
     }
