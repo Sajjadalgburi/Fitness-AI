@@ -8,8 +8,9 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Fitness AI",
+  description:
+    "Your personalized AI fitness coach that creates custom workout plans based on your goals, fitness level, and preferences. Get started on your fitness journey today with intelligent, adaptive workout recommendations.",
 };
 
 const geistSans = Geist({
@@ -28,6 +29,9 @@ export default function RootLayout({
       className={`${geistSans.className}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white">
         {children}
         <Analytics />
