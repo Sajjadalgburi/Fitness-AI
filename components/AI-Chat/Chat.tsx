@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import { Message, useChat } from "ai/react";
 import { workoutPlans } from "@/utils";
@@ -15,26 +14,33 @@ const Chat: React.FC = () => {
   const { user } = useUser();
   const userId = user?.id;
 
-  const { messages, input, setInput, handleInputChange, handleSubmit, append } =
-    useChat({
-      api: "/api/openai",
-    });
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    append,
+    isLoading,
+  } = useChat({
+    api: "/api/openai",
+  });
 
-  const [error, setError] = useState<string | null>(null);
   const [hasSentWorkoutInfo, setHasSentWorkoutInfo] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const chatContainer = useRef<HTMLDivElement>(null);
 
   // Modified useEffect for auto-submission
   useEffect(() => {
     const autoSubmitWorkout = async () => {
-      if (!workoutId || !userId) setError("No workout ID or user ID provided");
+      if (!isInitialLoad || hasSentWorkoutInfo) {
+        return;
+      }
 
-      if (hasSentWorkoutInfo) return;
+      if (!workoutId || !userId) return;
 
       const { data } = await getWorkoutById(Number(workoutId), userId!);
 
       if (!data?.[0]) {
-        setError("No workout info found");
         return;
       }
 
@@ -54,10 +60,11 @@ const Chat: React.FC = () => {
       });
 
       setHasSentWorkoutInfo(true);
+      setIsInitialLoad(false);
     };
 
     autoSubmitWorkout();
-  }, [workoutId, handleSubmit, setInput, userId, hasSentWorkoutInfo, append]);
+  }, [workoutId, userId, hasSentWorkoutInfo, isInitialLoad, append]);
 
   // auto scroll to bottom when new message is sent
   useEffect(() => {
@@ -147,12 +154,13 @@ const Chat: React.FC = () => {
             />
             <button
               type="submit"
+              disabled={isLoading}
               className="px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold
                            transform transition-all duration-200 hover:scale-105 hover:shadow-lg
                            disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               aria-label="Send message"
             >
-              Send
+              {isLoading ? "Sending..." : "Send"}
             </button>
           </form>
 
