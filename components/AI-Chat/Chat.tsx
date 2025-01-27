@@ -84,16 +84,16 @@ const Chat: React.FC = () => {
     if (chatContainer.current) {
       const { offsetHeight, scrollHeight, scrollTop } = chatContainer.current;
       if (scrollHeight >= scrollTop + offsetHeight) {
-        chatContainer.current.scrollTo(0, scrollHeight + 200);
+        chatContainer.current.scrollTo({
+          top: scrollHeight + 200,
+          behavior: "smooth",
+        });
       }
     }
   };
 
   return (
-    <div
-      ref={chatContainer}
-      className="w-full chat flex flex-col justify-between max-w-3xl h-[80vh] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl"
-    >
+    <div className="w-full chat flex flex-col justify-between max-w-3xl h-[80vh] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl">
       <div className="flex flex-col h-full">
         {/* Chat Header */}
         {messages.length < 1 && (
@@ -109,7 +109,7 @@ const Chat: React.FC = () => {
         )}
 
         {/* Messages Container - Make this scrollable */}
-        <div className="flex-grow overflow-y-auto mb-6">
+        <div ref={chatContainer} className="flex-grow overflow-y-auto mb-6">
           <RenderResponse messages={messages as Message[]} />
         </div>
 
