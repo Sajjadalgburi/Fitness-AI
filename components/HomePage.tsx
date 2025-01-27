@@ -105,7 +105,7 @@ const HomePage = () => {
       {/* Form Section - Reorganized with sections */}
       <div className="animate-fade-in w-full lg:mt-10 xs:w-3/4 xl:w-4/6 mx-3 xs:mx-[5rem] md:mx-[4rem] xl:mx-[7rem] bg-white/10 backdrop-blur-lg rounded-2xl p-6 lg:p-8 shadow-2xl h-[75vh] sm:h-[85vh] flex flex-col">
         {workoutCreated ? (
-          <div className="text-center py-12">
+          <div className="flex flex-col items-center min-h-full justify-center text-center py-12">
             <h2 className="text-2xl font-bold mb-4">
               Workout Created Successfully! 🎉
             </h2>
