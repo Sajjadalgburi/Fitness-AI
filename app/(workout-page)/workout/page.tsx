@@ -1,6 +1,3 @@
-"use client";
-
-import React from "react";
 import Chat from "@/components/AI-Chat/Chat";
 
 const Page = () => {
