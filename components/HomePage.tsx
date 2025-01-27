@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { WorkoutInfo } from "@/interface";
 import { createWorkoutAction } from "@/lib/workout.actions";
 import { useUser } from "@/hooks/index";
 import { useRouter } from "next/navigation";
+import { WorkoutInfo } from "@/interface";
 
 const HomePage = () => {
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
   const [gender, setGender] = useState("");
-  const [energyLevel, setEnergyLevel] = useState(5);
-  const [fitnessGoal, setFitnessGoal] = useState("");
-  const [availabilityTime, setAvailabilityTime] = useState("");
-  const [preferredWorkout, setPreferredWorkout] = useState("");
+  const [energy_level, setEnergyLevel] = useState(5);
+  const [fitness_goal, setFitnessGoal] = useState("");
+  const [time_available, setAvailabilityTime] = useState("");
+  const [preferred_workout, setPreferredWorkout] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
@@ -37,7 +37,7 @@ const HomePage = () => {
       return;
     }
 
-    if (!age || !gender || !weight || !fitnessGoal || !user?.id) {
+    if (!age || !gender || !weight || !fitness_goal || !user?.id) {
       setError("Please fill out all required fields.");
       return;
     }
@@ -46,10 +46,10 @@ const HomePage = () => {
       age,
       gender,
       weight,
-      energyLevel,
-      fitnessGoal,
-      availabilityTime,
-      preferredWorkout,
+      energy_level,
+      fitness_goal,
+      time_available,
+      preferred_workout,
     };
 
     try {
@@ -85,8 +85,8 @@ const HomePage = () => {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row justify-center items-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white px-4 py-12">
       {/* Hero Section */}
-      <div className="w-full lg:w-1/3  text-center mb-8 lg:mb-0">
-        <h1 className="text-4xl lg:text-6xl font-bold mb-6 animate-fade-in">
+      <div className="w-full lg:w-1/3 mt-9 lg:mt-3 text-center mb-8 lg:mb-0">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 animate-fade-in-down">
           Your Personalized{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
             AI
@@ -96,14 +96,14 @@ const HomePage = () => {
           </span>{" "}
           Coach!
         </h1>
-        <p className="text-base lg:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
+        <p className="animate-fade-in text-base lg:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
           Discover a new way to stay fit and healthy with personalized workout
           plans and real-time feedback.
         </p>
       </div>
 
       {/* Form Section */}
-      <div className="w-full lg:w-1/2 mx-auto bg-white/10 backdrop-blur-lg rounded-2xl p-4 lg:p-8 shadow-2xl">
+      <div className="animate-fade-in w-full lg:w-2/3 mx-6 sm:mx-auto bg-white/10 backdrop-blur-lg rounded-2xl p-4 lg:p-8 shadow-2xl">
         {workoutCreated == true ? (
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold mb-4">
@@ -202,14 +202,14 @@ const HomePage = () => {
                       name="energy-level"
                       className="hidden"
                       value={level}
-                      checked={energyLevel === level}
+                      checked={energy_level === level}
                       onChange={() => setEnergyLevel(level)}
                       required
                     />
                     <div
                       className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center text-lg font-semibold transition-all duration-200 
                       ${
-                        energyLevel === level
+                        energy_level === level
                           ? "bg-purple-500 text-white scale-110"
                           : "bg-white/20 group-hover:bg-white/30"
                       }`}
@@ -239,7 +239,7 @@ const HomePage = () => {
                 <select
                   id="fitness-goal"
                   className="input-style"
-                  value={fitnessGoal}
+                  value={fitness_goal}
                   onChange={(e) => setFitnessGoal(e.target.value)}
                   required
                 >
@@ -258,7 +258,7 @@ const HomePage = () => {
                 <select
                   id="availability-time"
                   className="input-style"
-                  value={availabilityTime}
+                  value={time_available}
                   onChange={(e) => setAvailabilityTime(e.target.value)}
                   required
                 >
@@ -277,7 +277,7 @@ const HomePage = () => {
               <select
                 id="preferred-workout"
                 className="input-style"
-                value={preferredWorkout}
+                value={preferred_workout}
                 onChange={(e) => setPreferredWorkout(e.target.value)}
                 required
               >
