@@ -197,10 +197,6 @@ const HomePage = () => {
                       <option value="">Select gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
-                      <option value="non-binary">Non-binary</option>
-                      <option value="prefer-not-to-say">
-                        Prefer not to say
-                      </option>
                     </select>
                   </div>
                 </div>
