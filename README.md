@@ -1,104 +1,105 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Fitness AI - Your Personal AI Workout Coach 🏋️‍♂️
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+Fitness AI is a modern web application that provides personalized workout plans using artificial intelligence. Built with Next.js, TypeScript, and powered by OpenAI's GPT-4, this application helps users create customized fitness routines based on their individual needs and preferences.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## Features ✨
 
-## Features
+- **AI-Powered Workout Plans**: Get personalized workout routines based on your fitness goals, experience level, and preferences
+- **Real-time Chat Interface**: Interact with an AI fitness coach for workout advice and modifications
+- **User Authentication**: Secure authentication system using Supabase
+- **Responsive Design**: Fully responsive interface that works seamlessly across all devices
+- **Progress Tracking**: Save and track your workout history
+- **Modern UI**: Beautiful, intuitive interface with smooth animations and transitions
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## Tech Stack 🛠️
 
-## Demo
+- Next.js 14 (App Router)
+- TypeScript
+- Supabase (Authentication & Database)
+- OpenAI GPT-4
+- Tailwind CSS
+- DaisyUI
+- Vercel (Deployment)
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## Getting Started 🚀
 
-## Deploy to Vercel
+### Prerequisites
 
-Vercel deployment will guide you through creating a Supabase account and project.
+- Node.js (v18 or higher)
+- npm or yarn
+- Supabase account
+- OpenAI API key
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+### Installation
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+1. Clone the repository
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+```bash
+git clone https://github.com/yourusername/fitness-ai.git
+cd fitness-ai
+```
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+2. Install dependencies
 
-## Clone and run locally
+```bash
+npm install
+# or
+yarn install
+```
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+3. Create a `.env.local` file in the root directory and add the following environment variables:
 
-2. Create a Next.js app using the Supabase Starter template npx command
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_api_key
+```
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+4. Set up your Supabase database tables:
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+   - Create a `workouts` table with the necessary columns (age, weight, fitness_goal, etc.)
+   - Set up authentication providers in your Supabase dashboard
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+5. Run the development server
 
-3. Use `cd` to change into the app's directory
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-   ```bash
-   cd with-supabase-app
-   ```
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-4. Rename `.env.example` to `.env.local` and update the following:
+## Project Structure 📁
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+- `/app`: Main application routes and API endpoints
+- `/components`: Reusable React components
+- `/hooks`: Custom React hooks
+- `/lib`: Utility functions and server actions
+- `/utils`: Helper functions and constants
+- `/interface`: TypeScript interfaces and types
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+## Contributing 🤝
 
-5. You can now run the Next.js local development server:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-   ```bash
-   npm run dev
-   ```
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+## License 📝
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## Acknowledgments 🙏
 
-## Feedback and issues
+- OpenAI for providing the GPT-4 API
+- Supabase for authentication and database services
+- Vercel for hosting and deployment
+- The Next.js team for the amazing framework
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+## Support 💬
 
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+For support, email your-email@example.com or open an issue in this repository.
