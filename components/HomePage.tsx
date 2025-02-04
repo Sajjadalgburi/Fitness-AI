@@ -322,7 +322,6 @@ const HomePage = () => {
                     <option value="">Select workout type</option>
                     <option value="cardio">Cardio</option>
                     <option value="strength">Strength Training</option>
-                    <option value="hiit">HIIT</option>
                     <option value="yoga">Yoga</option>
                     <option value="pilates">Pilates</option>
                   </select>
