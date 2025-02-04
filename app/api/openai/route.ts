@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
     console.log("Messages:", messages[0]?.content); // Log the content
 
-    const model = openai("gpt-3.5-turbo"); // Choose a model based on your requirements
+    const model = openai("gpt-4o-mini"); // Choose a model based on your requirements
     if (!model) {
       return NextResponse.json({ error: "Model not found" }, { status: 404 });
     }
